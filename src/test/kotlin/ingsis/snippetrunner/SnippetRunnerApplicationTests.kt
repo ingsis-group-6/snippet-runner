@@ -1,4 +1,4 @@
-package IngSis.snippetrunner
+package ingsis.snippetrunner
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

@@ -1,4 +1,4 @@
-package IngSis.snippetrunner
+package ingsis.snippetrunner
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

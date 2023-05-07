@@ -1,7 +1,7 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'IngSis.snippet-runner' is invalid and this project uses 'IngSis.snippetrunner' instead.
+* The original package name 'ingsis.snippet-runner' is invalid and this project uses 'ingsis.snippetrunner' instead.
 
 # Getting Started
 
