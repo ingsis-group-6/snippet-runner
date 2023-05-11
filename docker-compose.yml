@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  snippet-runner-api:
+    container_name: "snippet-runner-api"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      DB_USER: sa
+      DB_PASSWORD: password
+      DB_NAME: compose-db
+      DB_HOST: snippet_runner_db
+      DB_PORT: 5432
+
+  snippet_runner_db:
+    container_name: snippet_runner_db
+    image: postgres:12
+    ports:
+      - "5436:5436"
+    environment:
+      POSTGRES_USER: sa
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: compose-db
