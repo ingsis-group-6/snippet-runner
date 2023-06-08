@@ -25,15 +25,14 @@ jobs:
           username: ingsis-group-6
           password: ${{ secrets.TOKEN }}
 
-      - name: Build and Push Docker image
-        id: docker_build
-        env:
-          GITHUB_USERNAME: ${{ secrets.PUBLISH_USERNAME }}
-          GITHUB_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-        run: |
-          docker build \
-            --build-arg GITHUB_USERNAME=${GITHUB_USERNAME} \
-            --build-arg GITHUB_TOKEN=${GITHUB_TOKEN} \
-            --tag ghcr.io/ingsis-group-6/snippet-manager:latest .
-            
-          docker push ghcr.io/ingsis-group-6/snippet-manager:latest
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ghcr.io/ingsis-group-6/snippet-runner:latest
+          secrets: |
+            "gpr.user=${{ secrets.PUBLISH_USERNAME }}"
+            "gpr.key=${{ secrets.PUBLISH_TOKEN }}"
+          push: true
