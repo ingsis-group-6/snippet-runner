@@ -10,11 +10,11 @@ WORKDIR /home/gradle/src
 
 RUN --mount=type=secret,id=gpr.user \
     cat /run/secrets/gpr.user \
-    echo "$(< /run/secrets/gpr.user)" >> ~/.gradle/gradle.properties
+    echo "$(< /run/secrets/gpr.user)" >> gradle.properties
 
 RUN --mount=type=secret,id=gpr.key \
     cat /run/secrets/gpr.key \
-    echo "$(< /run/secrets/gpr.key)" >> ~/.gradle/gradle.properties
+    echo "$(< /run/secrets/gpr.key)" >> gradle.properties
 
 RUN gradle build
 
