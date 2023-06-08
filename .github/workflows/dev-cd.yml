@@ -30,7 +30,7 @@ jobs:
         with:
           tags: |
             ghcr.io/ingsis-group-6/snippet-runner:latest
-          secrets: |
-            "gpr.user=${{ secrets.PUBLISH_USERNAME }}"
-            "gpr.key=${{ secrets.PUBLISH_TOKEN }}"
+          build-args: |
+            "USERNAME=${{ secrets.PUBLISH_USERNAME }}"
+            "TOKEN=${{ secrets.PUBLISH_TOKEN }}"
           push: true
