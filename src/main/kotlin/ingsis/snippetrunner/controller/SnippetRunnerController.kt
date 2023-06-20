@@ -22,7 +22,7 @@ class SnippetRunnerController(private val serviceSelector: ServiceSelector) {
     @PostMapping("/run")
     fun runSnippet(@RequestHeader("Authorization") token: String, @RequestBody dto: SnippetRunnerDTO) {
         val service = this.serviceSelector.getRunnerService(dto.language)
-        return service.run(token, dto.snippetId, dto.version)
+        return service.run(token, dto.snippetId, dto.version, dto.inputs)
 
     }
 

@@ -6,5 +6,6 @@ import java.util.*
 data class SnippetRunnerDTO(
     val snippetId: UUID,
     val language: SupportedLanguage,
-    val version: String
+    val version: String,
+    val inputs: List<String>
 )
