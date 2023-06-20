@@ -39,6 +39,8 @@ dependencies {
 	implementation 'printscript:formatter:1.1.15-SNAPSHOT'
 	implementation 'printscript:linter:1.1.15-SNAPSHOT'
 
+	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
+
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
