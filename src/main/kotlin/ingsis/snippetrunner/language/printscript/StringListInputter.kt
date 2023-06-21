@@ -1,6 +1,6 @@
 package ingsis.snippetrunner.language.printscript
 
-import interpreter.input.Inputter
+import common.io.Inputter
 
 class StringListInputter(private val inputList: List<String>) : Inputter {
     private var cursor: Int = 0

@@ -1,6 +1,6 @@
 package ingsis.snippetrunner.language.printscript
 
-import interpreter.output.Outputter
+import common.io.Outputter
 
 class ListOutputter(private val outputList: MutableList<String>): Outputter {
 

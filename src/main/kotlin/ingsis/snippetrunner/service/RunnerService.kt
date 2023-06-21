@@ -6,9 +6,9 @@ interface RunnerService {
 
     fun run(token: String, snippetId: UUID, languageVersion: String, inputList: List<String>)
 
-    fun format(code: String): String
+    fun format(token: String, snippetId: UUID, languageVersion: String,): String
 
-    fun lint(code: String): String
+    fun lint(token: String, snippetId: UUID, languageVersion: String,): String
 
 
 }
