@@ -4,7 +4,7 @@ import java.util.UUID
 
 interface RunnerService {
 
-    fun run(token: String, snippetId: UUID, languageVersion: String, inputList: List<String>)
+    fun run(token: String, snippetId: UUID, languageVersion: String, inputList: List<String>): List<String>
 
     fun format(token: String, snippetId: UUID, languageVersion: String,): String
 
