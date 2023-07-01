@@ -8,7 +8,7 @@ interface RunnerService {
 
     fun format(token: String, snippetId: UUID, languageVersion: String,): String
 
-    fun lint(token: String, snippetId: UUID, languageVersion: String,): String
+    fun lint(token: String, snippetId: UUID, languageVersion: String,): List<String>
 
 
 }
