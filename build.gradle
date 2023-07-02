@@ -44,7 +44,7 @@ dependencies {
 	implementation 'printscript:lexer:2.0.0-SNAPSHOT'
 	implementation 'printscript:parser:2.0.0-SNAPSHOT'
 	implementation 'printscript:interpreter:2.0.0-SNAPSHOT'
-	implementation 'printscript:formatter:2.0.3-SNAPSHOT'
+	implementation 'printscript:formatter:2.0.4-SNAPSHOT'
 	implementation 'printscript:linter:2.0.3-SNAPSHOT'
 
 	implementation 'io.github.cdimascio:java-dotenv:5.2.2'

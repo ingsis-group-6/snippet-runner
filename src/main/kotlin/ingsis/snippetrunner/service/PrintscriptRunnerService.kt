@@ -8,6 +8,7 @@ import common.io.Outputter
 import ingsis.snippetrunner.error.HTTPError
 import ingsis.snippetrunner.language.printscript.ListOutputter
 import ingsis.snippetrunner.language.printscript.StringListInputter
+import ingsis.snippetrunner.model.dto.SnippetDTO
 import linter.implementations.IdentifierCaseLinter
 import linter.`interface`.Linter
 import org.springframework.beans.factory.annotation.Autowired
@@ -48,7 +49,8 @@ class PrintscriptRunnerService(@Autowired private val httpService: HttpService):
         val stringAccumulator = StringAccumulator("")
         val concatOutputter: Outputter = StringAccumulatorOutputter(stringAccumulator)
         val sf = StreamedFormat(ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray()), languageVersion, concatOutputter, FormatterRules(customRules))
-        //sf.execute()
+        sf.execute()
+        this.httpService.updateSnippetCodeInManager(token, snippetId, SnippetDTO(snippetManagerResponse.name, snippetManagerResponse.type, stringAccumulator.stringValue))
         return stringAccumulator.stringValue
     }
 
@@ -61,9 +63,7 @@ class PrintscriptRunnerService(@Autowired private val httpService: HttpService):
         val contentInputStream = ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray())
 
         StreamedLint(contentInputStream, languageVersion, outputter, linterRules).execute()
-
         print(outputsList)
-
         return outputsList
 
     }
@@ -80,6 +80,6 @@ class StringAccumulator(var stringValue: String) {
 
 class StringAccumulatorOutputter(private val stringAccumulator: StringAccumulator): Outputter {
     override fun output(text: String) {
-        stringAccumulator.concat(text)
+        if(text != "EOF") stringAccumulator.concat(text)
     }
 }
