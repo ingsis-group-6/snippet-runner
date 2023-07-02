@@ -4,6 +4,8 @@ import ingsis.snippetrunner.model.SupportedLanguage
 import ingsis.snippetrunner.model.dto.BaseSnippetRunnerDTO
 import ingsis.snippetrunner.model.dto.RunnerOutputDTO
 import ingsis.snippetrunner.model.dto.SnippetRunnerDTO
+import ingsis.snippetrunner.model.event.LintResultEvent
+import ingsis.snippetrunner.redis.producer.LintResultProducer
 import ingsis.snippetrunner.service.PrintscriptRunnerService
 import ingsis.snippetrunner.service.RunnerService
 import ingsis.snippetrunner.service.ServiceSelector
@@ -14,7 +16,10 @@ import org.springframework.web.bind.annotation.*
 import printscript.v1.app.StreamedExecution
 
 @RestController
-class SnippetRunnerController(private val serviceSelector: ServiceSelector) {
+class SnippetRunnerController(
+    private val serviceSelector: ServiceSelector,
+    private val lintResultProducer: LintResultProducer
+) {
     @GetMapping
     fun hello(): String {
         val printscript = Lexer()
@@ -45,6 +50,15 @@ class SnippetRunnerController(private val serviceSelector: ServiceSelector) {
         return ResponseEntity(RunnerOutputDTO(result), HttpStatus.OK)
 
     }
+
+    @PostMapping("/redis")
+    suspend fun redis(@RequestHeader("Authorization") token: String, @RequestBody dto: BaseSnippetRunnerDTO): ResponseEntity<LintResultEvent> {
+        val event = LintResultEvent(dto.snippetId, "finished")
+        this.lintResultProducer.publishEvent(event)
+        return ResponseEntity(event, HttpStatus.OK)
+
+    }
+
 
 
 
