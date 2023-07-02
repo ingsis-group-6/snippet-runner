@@ -1,9 +1,8 @@
-name: "Continuous Deployment"
+name: "Continuous Deployment - DEV"
 on:
   push:
     branches:
-      - main
-      - workflow-change
+      - develop
 jobs:
   push_to_registry:
     name: Push Docker image to GitHub Packages
@@ -29,7 +28,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           tags: |
-            ghcr.io/ingsis-group-6/snippet-runner:latest
+            ghcr.io/ingsis-group-6/snippet-runner-dev:latest
           build-args: |
             "USERNAME=${{ secrets.PUBLISH_USERNAME }}"
             "TOKEN=${{ secrets.PUBLISH_TOKEN }}"
