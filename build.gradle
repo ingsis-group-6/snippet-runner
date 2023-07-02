@@ -22,6 +22,14 @@ repositories {
 			password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
 		}
 	}
+	maven {
+		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/austral-ingsis/class-redis-streams")
+		credentials {
+			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+			password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+		}
+	}
 }
 
 dependencies {
@@ -45,6 +53,10 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	implementation 'org.austral.ingsis:redis-streams:0.1.7'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
 }
 
 tasks.withType(KotlinCompile) {
