@@ -2,11 +2,13 @@ package ingsis.snippetrunner.service
 
 import common.config.reader.formatter.CustomFormatterRules
 import common.config.reader.formatter.FormatterRules
+import common.config.reader.linter.CaseConvention
 import common.io.Inputter
 import common.io.Outputter
 import ingsis.snippetrunner.error.HTTPError
 import ingsis.snippetrunner.language.printscript.ListOutputter
 import ingsis.snippetrunner.language.printscript.StringListInputter
+import linter.implementations.IdentifierCaseLinter
 import linter.`interface`.Linter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -45,14 +47,14 @@ class PrintscriptRunnerService(@Autowired private val httpService: HttpService):
         val customRules = CustomFormatterRules(0,1,1,1,4)
         val stringAccumulator = StringAccumulator("")
         val concatOutputter: Outputter = StringAccumulatorOutputter(stringAccumulator)
-        StreamedFormat(ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray()), languageVersion, concatOutputter, FormatterRules(customRules)).execute()
-
+        val sf = StreamedFormat(ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray()), languageVersion, concatOutputter, FormatterRules(customRules))
+        //sf.execute()
         return stringAccumulator.stringValue
     }
 
     override fun lint(token: String, snippetId: UUID, languageVersion: String,): List<String> {
         val snippetManagerResponse = this.httpService.getSnippetCodeFromManager(token, snippetId)
-        val linterRules: Set<Linter> = setOf() // TO``DO: get linter rules from snippet manager
+        val linterRules: Set<Linter> = setOf(IdentifierCaseLinter(CaseConvention.CAMEL_CASE)) // TO``DO: get linter rules from snippet manager
 
         val outputsList: MutableList<String> = mutableListOf()
         val outputter: Outputter = ListOutputter(outputsList)

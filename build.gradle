@@ -31,13 +31,13 @@ dependencies {
 	implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
 	implementation 'org.jetbrains.kotlin:kotlin-reflect'
 
-	implementation 'printscript:common:2.0.2-SNAPSHOT'
-	implementation 'printscript:app:2.0.1-SNAPSHOT'
+	implementation 'printscript:common:2.0.3-SNAPSHOT'
+	implementation 'printscript:app:2.0.3-SNAPSHOT'
 	implementation 'printscript:lexer:2.0.0-SNAPSHOT'
 	implementation 'printscript:parser:2.0.0-SNAPSHOT'
 	implementation 'printscript:interpreter:2.0.0-SNAPSHOT'
-	implementation 'printscript:formatter:2.0.1-SNAPSHOT'
-	implementation 'printscript:linter:2.0.0-SNAPSHOT'
+	implementation 'printscript:formatter:2.0.3-SNAPSHOT'
+	implementation 'printscript:linter:2.0.3-SNAPSHOT'
 
 	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 

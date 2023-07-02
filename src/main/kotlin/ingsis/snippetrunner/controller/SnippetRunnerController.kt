@@ -33,8 +33,16 @@ class SnippetRunnerController(private val serviceSelector: ServiceSelector) {
     @PostMapping("/format")
     fun formatSnippet(@RequestHeader("Authorization") token: String, @RequestBody dto: BaseSnippetRunnerDTO): ResponseEntity<String> {
         val service = this.serviceSelector.getRunnerService(dto.language)
-        service.format(token, dto.snippetId, dto.version)
-        return ResponseEntity("Snippet correctly formatted", HttpStatus.OK)
+        val result = service.format(token, dto.snippetId, dto.version)
+        return ResponseEntity(result, HttpStatus.OK)
+
+    }
+
+    @PostMapping("/lint")
+    fun lintSnippet(@RequestHeader("Authorization") token: String, @RequestBody dto: BaseSnippetRunnerDTO): ResponseEntity<RunnerOutputDTO> {
+        val service = this.serviceSelector.getRunnerService(dto.language)
+        val result = service.lint(token, dto.snippetId, dto.version)
+        return ResponseEntity(RunnerOutputDTO(result), HttpStatus.OK)
 
     }
 
