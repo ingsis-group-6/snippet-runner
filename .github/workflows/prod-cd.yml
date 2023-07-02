@@ -1,0 +1,35 @@
+name: "Continuous Deployment - PROD"
+on:
+  push:
+    branches:
+      - main
+jobs:
+  push_to_registry:
+    name: Push Docker image to GitHub Packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create Short SHA
+        uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with:
+          length: 8
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ingsis-group-6
+          password: ${{ secrets.TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          tags: |
+            ghcr.io/ingsis-group-6/snippet-runner-prod:latest
+          build-args: |
+            "USERNAME=${{ secrets.PUBLISH_USERNAME }}"
+            "TOKEN=${{ secrets.PUBLISH_TOKEN }}"
+          push: true
