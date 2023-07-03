@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import snippet.events.LintResultEvent
+import snippet.events.LintResultStatus
 
 @RestController
 class SnippetRunnerController(
@@ -49,7 +50,7 @@ class SnippetRunnerController(
 
     @PostMapping("/redis")
     suspend fun redis(@RequestHeader("Authorization") token: String, @RequestBody dto: BaseSnippetRunnerDTO): ResponseEntity<LintResultEvent> {
-        val event = LintResultEvent(dto.snippetId.toString(), "finished")
+        val event = LintResultEvent(dto.snippetId.toString(), LintResultStatus.PENDING)
         this.lintResultProducer.publishEvent(event)
         return ResponseEntity(event, HttpStatus.OK)
 

@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Component
 import snippet.events.LintResultEvent
+import snippet.events.LintResultStatus
 import spring.mvc.redis.streams.RedisStreamProducer
 import java.util.*
 
@@ -16,9 +17,9 @@ class LintResultProducer @Autowired constructor(
     redis: RedisTemplate<String, String>
 ) : RedisStreamProducer(streamKey, redis) {
 
-    suspend fun publishEvent(snippetId: UUID, status: String) {
+    suspend fun publishEvent(snippetId: UUID, status: LintResultEvent) {
         println("Publishing on stream: $streamKey")
-        val product = LintResultEvent(snippetId.toString(), status)
+        val product = LintResultEvent(snippetId.toString(), LintResultStatus.PENDING)
         emit(product)
     }
 
