@@ -35,7 +35,7 @@ class PrintscriptRunnerService(@Autowired private val httpService: HttpService):
         val contentInputStream = ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray())
 
         StreamedExecution(contentInputStream, languageVersion, inputter, outputter).execute()
-
+        val a = 3
         return outputsList
 
     }
