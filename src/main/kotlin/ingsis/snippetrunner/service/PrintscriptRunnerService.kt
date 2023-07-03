@@ -25,14 +25,12 @@ import java.util.*
 class PrintscriptRunnerService(@Autowired private val httpService: HttpService): RunnerService {
     override fun run(token: String, snippetId: UUID, languageVersion: String, inputList: List<String>): List<String> {
 
-
         val snippetManagerResponse = this.httpService.getSnippetCodeFromManager(token, snippetId)
 
         val outputsList: MutableList<String> = mutableListOf()
 
         val inputter: Inputter = StringListInputter(inputList)
         val outputter: Outputter = ListOutputter(outputsList)
-
 
         val contentInputStream = ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray())
 
@@ -48,11 +46,11 @@ class PrintscriptRunnerService(@Autowired private val httpService: HttpService):
         val customRules = CustomFormatterRules(0,1,1,1,4)
         val stringAccumulator = StringAccumulator("")
         val concatOutputter: Outputter = StringAccumulatorOutputter(stringAccumulator)
-        val sf = StreamedFormat(ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray()), languageVersion, concatOutputter, FormatterRules(customRules))
-        sf.execute()
+        formatSnippet(snippetManagerResponse, languageVersion, concatOutputter, customRules)
         this.httpService.updateSnippetCodeInManager(token, snippetId, SnippetDTO(snippetManagerResponse.name, snippetManagerResponse.type, stringAccumulator.stringValue))
         return stringAccumulator.stringValue
     }
+
 
     override fun lint(token: String, snippetId: UUID, languageVersion: String,): List<String> {
         val snippetManagerResponse = this.httpService.getSnippetCodeFromManager(token, snippetId)
@@ -62,10 +60,32 @@ class PrintscriptRunnerService(@Autowired private val httpService: HttpService):
         val outputter: Outputter = ListOutputter(outputsList)
         val contentInputStream = ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray())
 
-        StreamedLint(contentInputStream, languageVersion, outputter, linterRules).execute()
+        lintSnippet(contentInputStream, languageVersion, outputter, linterRules)
         print(outputsList)
         return outputsList
 
+    }
+
+    private fun formatSnippet(
+        snippetManagerResponse: SnippetDTO,
+        languageVersion: String,
+        concatOutputter: Outputter,
+        customRules: CustomFormatterRules
+    ) {
+        StreamedFormat(
+            ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray()),
+            languageVersion,
+            concatOutputter,
+            FormatterRules(customRules)
+        ).execute()
+    }
+    private fun lintSnippet(
+        contentInputStream: ByteArrayInputStream,
+        languageVersion: String,
+        outputter: Outputter,
+        linterRules: Set<Linter>
+    ) {
+        StreamedLint(contentInputStream, languageVersion, outputter, linterRules).execute()
     }
 
 

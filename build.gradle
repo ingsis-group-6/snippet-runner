@@ -24,7 +24,23 @@ repositories {
 	}
 	maven {
 		name = "GitHubPackages"
+		url = uri("https://maven.pkg.github.com/ingsis-group-6/snippet-events")
+		credentials {
+			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+			password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+		}
+	}
+	maven {
+		name = "GitHubPackages"
 		url = uri("https://maven.pkg.github.com/austral-ingsis/class-redis-streams")
+		credentials {
+			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+			password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+		}
+	}
+	maven {
+		name = "Spring-mvc-redis-streams"
+		url = uri("https://maven.pkg.github.com/Snippet-Searcher/spring-mvc-redis-streams%22")
 		credentials {
 			username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
 			password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
@@ -49,13 +65,18 @@ dependencies {
 
 	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 
+	implementation 'org.ingsis.group6:snippet-events:0.0.1-SNAPSHOT'
+
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-	implementation 'org.austral.ingsis:redis-streams:0.1.7'
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
+	implementation("spring-mvc-redis-streams:lib:0.0.1-SNAPSHOT")
+	implementation("org.springframework.boot:spring-boot-starter-data-redis")
+
+//	implementation 'org.austral.ingsis:redis-streams:0.1.7'
+//	implementation 'org.springframework.boot:spring-boot-starter-data-redis-reactive'
 	implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor'
 }
 
