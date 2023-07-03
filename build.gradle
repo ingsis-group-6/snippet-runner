@@ -65,7 +65,7 @@ dependencies {
 
 	implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 
-	implementation 'org.ingsis.group6:snippet-events:0.0.1-SNAPSHOT'
+	implementation 'org.ingsis.group6:snippet-events:0.0.2-SNAPSHOT'
 
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
