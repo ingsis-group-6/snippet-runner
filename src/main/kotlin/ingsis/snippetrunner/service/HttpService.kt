@@ -1,7 +1,6 @@
 package ingsis.snippetrunner.service
 
 import ingsis.snippetrunner.model.dto.SnippetDTO
-import io.github.cdimascio.dotenv.Dotenv
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -15,8 +14,8 @@ import java.util.*
 class HttpService {
     @Throws(HttpClientErrorException::class)
     fun getSnippetCodeFromManager(token: String, snippetId: UUID): SnippetDTO {
-        val env = Dotenv.load()
-        val url = env["MANAGER_URI"] + "/snippet/" + snippetId.toString()
+
+        val url = System.getenv("MANAGER_URI") + "/snippet/" + snippetId.toString()
         val template = RestTemplate()
         val headers = HttpHeaders()
         headers.set("Authorization", token)
@@ -32,8 +31,7 @@ class HttpService {
 
     @Throws(HttpClientErrorException::class)
     fun updateSnippetCodeInManager(token: String, snippetId: UUID, updatedSnippet: SnippetDTO): SnippetDTO {
-        val env = Dotenv.load()
-        val url = env["MANAGER_URI"] + "/snippet/" + snippetId.toString()
+        val url = System.getenv("MANAGER_URI") + "/snippet/" + snippetId.toString()
         val restTemplate = RestTemplate()
         val headers = HttpHeaders()
         headers.set("Authorization", token)
