@@ -5,16 +5,13 @@ import common.config.reader.formatter.FormatterRules
 import common.config.reader.linter.CaseConvention
 import common.io.Inputter
 import common.io.Outputter
-import ingsis.snippetrunner.error.HTTPError
 import ingsis.snippetrunner.language.printscript.ListOutputter
 import ingsis.snippetrunner.language.printscript.StringListInputter
 import ingsis.snippetrunner.model.dto.SnippetDTO
 import linter.implementations.IdentifierCaseLinter
 import linter.`interface`.Linter
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.web.client.HttpClientErrorException
 import printscript.v1.app.StreamedExecution
 import printscript.v1.app.StreamedFormat
 import printscript.v1.app.StreamedLint
@@ -51,18 +48,26 @@ class PrintscriptRunnerService(@Autowired private val httpService: HttpService):
     }
 
 
-    override fun lint(token: String, snippetId: UUID, languageVersion: String,): List<String> {
+    override fun fetchAndLint(token: String, snippetId: UUID, languageVersion: String,): List<String> {
         val snippetManagerResponse = this.httpService.getSnippetCodeFromManager(token, snippetId)
-        val linterRules: Set<Linter> = setOf(IdentifierCaseLinter(CaseConvention.CAMEL_CASE)) // TO``DO: get linter rules from snippet manager
+        return lint(snippetManagerResponse.content!!, languageVersion)
+
+    }
+
+    fun lint(
+        snippetContent: String,
+        languageVersion: String
+    ): MutableList<String> {
+        val linterRules: Set<Linter> =
+            setOf(IdentifierCaseLinter(CaseConvention.CAMEL_CASE)) // TO``DO: get linter rules from snippet manager
 
         val outputsList: MutableList<String> = mutableListOf()
         val outputter: Outputter = ListOutputter(outputsList)
-        val contentInputStream = ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray())
+        val contentInputStream = ByteArrayInputStream(snippetContent.toByteArray())
 
         lintSnippet(contentInputStream, languageVersion, outputter, linterRules)
         print(outputsList)
         return outputsList
-
     }
 
     private fun formatSnippet(

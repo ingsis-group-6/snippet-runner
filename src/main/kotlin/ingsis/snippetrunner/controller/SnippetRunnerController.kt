@@ -9,8 +9,9 @@ import lexer.implementation.Lexer
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import snippet.events.LintResultEvent
-import snippet.events.LintResultStatus
+import snippet.events.lint.LintResultEvent
+import snippet.events.lint.LintResultStatus
+
 
 @RestController
 class SnippetRunnerController(
@@ -43,14 +44,14 @@ class SnippetRunnerController(
     @PostMapping("/lint")
     fun lintSnippet(@RequestHeader("Authorization") token: String, @RequestBody dto: BaseSnippetRunnerDTO): ResponseEntity<RunnerOutputDTO> {
         val service = this.serviceSelector.getRunnerService(dto.language)
-        val result = service.lint(token, dto.snippetId, dto.version)
+        val result = service.fetchAndLint(token, dto.snippetId, dto.version)
         return ResponseEntity(RunnerOutputDTO(result), HttpStatus.OK)
 
     }
 
     @PostMapping("/redis")
     suspend fun redis(@RequestHeader("Authorization") token: String, @RequestBody dto: BaseSnippetRunnerDTO): ResponseEntity<LintResultEvent> {
-        val event = LintResultEvent(dto.snippetId.toString(), LintResultStatus.PENDING)
+        val event = LintResultEvent(dto.snippetId, LintResultStatus.PENDING)
         this.lintResultProducer.publishEvent(event)
         return ResponseEntity(event, HttpStatus.OK)
 
