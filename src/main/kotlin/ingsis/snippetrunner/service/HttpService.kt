@@ -16,8 +16,7 @@ class HttpService {
     @Throws(HttpClientErrorException::class)
     fun getSnippetCodeFromManager(token: String, snippetId: UUID): SnippetDTO {
 
-        //val url = System.getenv("MANAGER_URI") + "/snippet/" + snippetId.toString()
-        val url = "http://localhost:8081" + "/snippet/" + snippetId.toString()
+        val url = System.getenv("MANAGER_URI") + "/snippet/" + snippetId.toString()
         val template = RestTemplate()
         val headers = HttpHeaders()
         headers.set("Authorization", token)
@@ -43,8 +42,7 @@ class HttpService {
 
     @Throws(HttpClientErrorException::class)
     fun getTest(token: String, testId: UUID): TestDTO {
-        //val url = System.getenv("MANAGER_URI") + "/snippet/" + snippetId.toString()
-        val url = "http://localhost:8081" + "/test/" + testId.toString()
+        val url = System.getenv("MANAGER_URI") + "/test/" + testId.toString()
         val template = RestTemplate()
         val headers = HttpHeaders()
         headers.set("Authorization", token)
