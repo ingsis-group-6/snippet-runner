@@ -8,6 +8,7 @@ import common.io.Outputter
 import ingsis.snippetrunner.language.printscript.ListOutputter
 import ingsis.snippetrunner.language.printscript.StringListInputter
 import ingsis.snippetrunner.model.dto.SnippetDTO
+import ingsis.snippetrunner.model.dto.TestResultDTO
 import linter.implementations.IdentifierCaseLinter
 import linter.`interface`.Linter
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,24 +17,25 @@ import printscript.v1.app.StreamedExecution
 import printscript.v1.app.StreamedFormat
 import printscript.v1.app.StreamedLint
 import java.io.ByteArrayInputStream
+import java.io.InputStream
 import java.util.*
 
 @Service
 class PrintscriptRunnerService(@Autowired private val httpService: HttpService): RunnerService {
-    override fun run(token: String, snippetId: UUID, languageVersion: String, inputList: List<String>): List<String> {
+    override fun fetchAndRun(token: String, snippetId: UUID, languageVersion: String, inputList: List<String>): List<String> {
 
         val snippetManagerResponse = this.httpService.getSnippetCodeFromManager(token, snippetId)
 
-        val outputsList: MutableList<String> = mutableListOf()
+        return runSnippet(ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray()), inputList, languageVersion)
 
+    }
+
+    override fun runSnippet(contentInputStream: InputStream, inputList: List<String>, languageVersion: String): List<String> {
         val inputter: Inputter = StringListInputter(inputList)
+        val outputsList = mutableListOf<String>()
         val outputter: Outputter = ListOutputter(outputsList)
-
-        val contentInputStream = ByteArrayInputStream(snippetManagerResponse.content!!.toByteArray())
-
         StreamedExecution(contentInputStream, languageVersion, inputter, outputter).execute()
         return outputsList
-
     }
 
     override fun format(token: String, snippetId: UUID, languageVersion: String,): String {
@@ -54,10 +56,10 @@ class PrintscriptRunnerService(@Autowired private val httpService: HttpService):
 
     }
 
-    fun lint(
+    override fun lint(
         snippetContent: String,
         languageVersion: String
-    ): MutableList<String> {
+    ): List<String> {
         val linterRules: Set<Linter> =
             setOf(IdentifierCaseLinter(CaseConvention.CAMEL_CASE)) // TO``DO: get linter rules from snippet manager
 
@@ -69,6 +71,7 @@ class PrintscriptRunnerService(@Autowired private val httpService: HttpService):
         print(outputsList)
         return outputsList
     }
+
 
     private fun formatSnippet(
         snippetManagerResponse: SnippetDTO,

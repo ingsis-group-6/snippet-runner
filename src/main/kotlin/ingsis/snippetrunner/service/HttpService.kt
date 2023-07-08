@@ -1,6 +1,7 @@
 package ingsis.snippetrunner.service
 
 import ingsis.snippetrunner.model.dto.SnippetDTO
+import ingsis.snippetrunner.model.dto.TestDTO
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -15,18 +16,16 @@ class HttpService {
     @Throws(HttpClientErrorException::class)
     fun getSnippetCodeFromManager(token: String, snippetId: UUID): SnippetDTO {
 
-        val url = System.getenv("MANAGER_URI") + "/snippet/" + snippetId.toString()
+        //val url = System.getenv("MANAGER_URI") + "/snippet/" + snippetId.toString()
+        val url = "http://localhost:8081" + "/snippet/" + snippetId.toString()
         val template = RestTemplate()
         val headers = HttpHeaders()
         headers.set("Authorization", token)
         val requestEntity = HttpEntity<Void>(headers)
 
-        try {
-            val response: ResponseEntity<SnippetDTO> = template.exchange(url, HttpMethod.GET, requestEntity, SnippetDTO::class.java)
-            return response.body!!
-        } catch (ex: HttpClientErrorException) {
-            throw ex // Optionally, rethrow the exception or return a default value
-        }
+        val response: ResponseEntity<SnippetDTO> = template.exchange(url, HttpMethod.GET, requestEntity, SnippetDTO::class.java)
+        return response.body!!
+
     }
 
     @Throws(HttpClientErrorException::class)
@@ -37,12 +36,23 @@ class HttpService {
         headers.set("Authorization", token)
         val requestEntity = HttpEntity<SnippetDTO>(updatedSnippet, headers)
 
-        try {
-            val response: ResponseEntity<SnippetDTO> = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, SnippetDTO::class.java)
-            return response.body!!
-        } catch (ex: HttpClientErrorException) {
-            throw ex // Optionally, rethrow the exception or handle it as needed
-        }
+        val response: ResponseEntity<SnippetDTO> = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, SnippetDTO::class.java)
+        return response.body!!
+
+    }
+
+    @Throws(HttpClientErrorException::class)
+    fun getTest(token: String, testId: UUID): TestDTO {
+        //val url = System.getenv("MANAGER_URI") + "/snippet/" + snippetId.toString()
+        val url = "http://localhost:8081" + "/test/" + testId.toString()
+        val template = RestTemplate()
+        val headers = HttpHeaders()
+        headers.set("Authorization", token)
+        val requestEntity = HttpEntity<Void>(headers)
+
+        val response: ResponseEntity<TestDTO> = template.exchange(url, HttpMethod.GET, requestEntity, TestDTO::class.java)
+        return response.body!!
+
     }
 
 

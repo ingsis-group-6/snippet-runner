@@ -1,14 +1,19 @@
 package ingsis.snippetrunner.service
 
+import ingsis.snippetrunner.model.dto.TestResultDTO
+import java.io.InputStream
 import java.util.UUID
 
 interface RunnerService {
 
-    fun run(token: String, snippetId: UUID, languageVersion: String, inputList: List<String>): List<String>
+    fun fetchAndRun(token: String, snippetId: UUID, languageVersion: String, inputList: List<String>): List<String>
+    fun runSnippet(contentInputStream: InputStream, inputList: List<String>, languageVersion: String): List<String>
 
-    fun format(token: String, snippetId: UUID, languageVersion: String,): String
+    fun format(token: String, snippetId: UUID, languageVersion: String): String
 
-    fun fetchAndLint(token: String, snippetId: UUID, languageVersion: String,): List<String>
+    fun fetchAndLint(token: String, snippetId: UUID, languageVersion: String): List<String>
+    fun lint(snippetContent: String, languageVersion: String): List<String>
+
 
 
 }
