@@ -5,7 +5,6 @@ import ingsis.snippetrunner.redis.producer.LintResultProducer
 import ingsis.snippetrunner.service.PrintscriptRunnerService
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.austral.ingsis.`class`.redis.RedisStreamConsumer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.redis.connection.stream.ObjectRecord
@@ -16,11 +15,12 @@ import org.springframework.stereotype.Component
 import snippet.events.lint.LintRequestEvent
 import snippet.events.lint.LintResultEvent
 import snippet.events.lint.LintResultStatus
+import spring.mvc.redis.streams.RedisStreamConsumer
 import java.time.Duration
 
 @Component
 class LintRequestConsumer @Autowired constructor(
-    redis: ReactiveRedisTemplate<String, String>,
+    redis: RedisTemplate<String, String>,
     @Value("\${stream.request_key}") streamKey: String,
     @Value("\${groups.lint}") groupId: String,
     @Autowired private val runnerService: PrintscriptRunnerService,
