@@ -3,6 +3,7 @@ package ingsis.snippetrunner.redis.consumer
 
 import ingsis.snippetrunner.redis.producer.LintResultProducer
 import ingsis.snippetrunner.service.PrintscriptRunnerService
+import ingsis.snippetrunner.utils.LinterRulesDecoder
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,7 +25,8 @@ class LintRequestConsumer @Autowired constructor(
     @Value("\${stream.request_key}") streamKey: String,
     @Value("\${groups.lint}") groupId: String,
     @Autowired private val runnerService: PrintscriptRunnerService,
-    @Autowired private val lintResultProducer: LintResultProducer
+    @Autowired private val lintResultProducer: LintResultProducer,
+    @Autowired private val linterRulesDecoder: LinterRulesDecoder
 ) : RedisStreamConsumer<LintRequestEvent>(streamKey, groupId, redis) {
 
     init {
@@ -33,7 +35,8 @@ class LintRequestConsumer @Autowired constructor(
 
     override fun onMessage(record: ObjectRecord<String, LintRequestEvent>) {
         println("Received event of snippet ${record.value.snippetId} with content ${record.value.snippetContent}")
-        val result = runnerService.lint(record.value.snippetContent, "1.0")
+        val rules = linterRulesDecoder.decodeLinterRules(record.value.rules)
+        val result = runnerService.lint(record.value.snippetContent, "1.0", rules)
         val event = LintResultEvent(record.value.snippetId, if(result.isEmpty()) LintResultStatus.COMPLIANT else LintResultStatus.NON_COMPLIANT)
         GlobalScope.launch {
             lintResultProducer.publishEvent(event)

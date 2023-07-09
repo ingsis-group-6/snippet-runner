@@ -1,6 +1,7 @@
 package ingsis.snippetrunner.service
 
 import ingsis.snippetrunner.model.SupportedLanguage
+import ingsis.snippetrunner.utils.LinterRulesDecoder
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory
 import org.springframework.context.ApplicationContext
@@ -13,7 +14,8 @@ class ServiceSelector(@Autowired private val applicationContext: ApplicationCont
         return when(language) {
             SupportedLanguage.PRINTSCRIPT -> {
                 val httpService = applicationContext.getBean(HttpService::class.java)
-                PrintscriptRunnerService(httpService)
+                val linterRulesDecoder = applicationContext.getBean(LinterRulesDecoder::class.java)
+                PrintscriptRunnerService(httpService, linterRulesDecoder)
             }
         }
     }

@@ -2,7 +2,7 @@ package ingsis.snippetrunner.controller
 
 import ingsis.snippetrunner.model.dto.BaseSnippetRunnerDTO
 import ingsis.snippetrunner.model.dto.RunnerOutputDTO
-import ingsis.snippetrunner.model.dto.SnippetRunnerDTO
+import ingsis.snippetrunner.model.dto.SnippetRunnerDto
 import ingsis.snippetrunner.model.dto.TestResultDTO
 import ingsis.snippetrunner.redis.producer.LintResultProducer
 import ingsis.snippetrunner.service.ServiceSelector
@@ -31,7 +31,7 @@ class SnippetRunnerController(
     // lenguaje, version, id
 
     @PostMapping("/run")
-    fun runSnippet(@RequestHeader("Authorization") token: String, @RequestBody dto: SnippetRunnerDTO): ResponseEntity<RunnerOutputDTO> {
+    fun runSnippet(@RequestHeader("Authorization") token: String, @RequestBody dto: SnippetRunnerDto): ResponseEntity<RunnerOutputDTO> {
         val service = this.serviceSelector.getRunnerService(dto.language)
         return ResponseEntity(RunnerOutputDTO(service.fetchAndRun(token, dto.snippetId, dto.version, dto.inputs)), HttpStatus.OK)
 

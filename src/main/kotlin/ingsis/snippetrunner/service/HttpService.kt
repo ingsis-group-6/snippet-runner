@@ -2,6 +2,8 @@ package ingsis.snippetrunner.service
 
 import ingsis.snippetrunner.model.dto.SnippetDTO
 import ingsis.snippetrunner.model.dto.TestDTO
+import ingsis.snippetrunner.model.dto.rules.FormatterRulesDTO
+import ingsis.snippetrunner.model.dto.rules.LinterRulesDTO
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -53,6 +55,31 @@ class HttpService {
 
     }
 
+    @Throws(HttpClientErrorException::class)
+    fun getFormatterRules(token: String): FormatterRulesDTO {
+        val url = System.getenv("MANAGER_URI") + "/rule/formatter"
+        val template = RestTemplate()
+        val headers = HttpHeaders()
+        headers.set("Authorization", token)
+        val requestEntity = HttpEntity<Void>(headers)
+
+        val response: ResponseEntity<FormatterRulesDTO> = template.exchange(url, HttpMethod.GET, requestEntity, FormatterRulesDTO::class.java)
+        return response.body!!
+
+    }
+
+    @Throws(HttpClientErrorException::class)
+    fun getLinterRules(token: String): LinterRulesDTO {
+        val url = System.getenv("MANAGER_URI") + "/rule/linter"
+        val template = RestTemplate()
+        val headers = HttpHeaders()
+        headers.set("Authorization", token)
+        val requestEntity = HttpEntity<Void>(headers)
+
+        val response: ResponseEntity<LinterRulesDTO> = template.exchange(url, HttpMethod.GET, requestEntity, LinterRulesDTO::class.java)
+        return response.body!!
+
+    }
 
 
 }

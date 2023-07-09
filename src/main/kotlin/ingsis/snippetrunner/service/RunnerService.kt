@@ -1,6 +1,7 @@
 package ingsis.snippetrunner.service
 
 import ingsis.snippetrunner.model.dto.TestResultDTO
+import linter.`interface`.Linter
 import java.io.InputStream
 import java.util.UUID
 
@@ -12,7 +13,7 @@ interface RunnerService {
     fun format(token: String, snippetId: UUID, languageVersion: String): String
 
     fun fetchAndLint(token: String, snippetId: UUID, languageVersion: String): List<String>
-    fun lint(snippetContent: String, languageVersion: String): List<String>
+    fun lint(snippetContent: String, languageVersion: String, linters: Set<Linter>): List<String>
 
 
 
