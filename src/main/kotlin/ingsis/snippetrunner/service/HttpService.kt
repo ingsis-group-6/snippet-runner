@@ -32,7 +32,7 @@ class HttpService {
 
     @Throws(HttpClientErrorException::class)
     fun updateSnippetCodeInManager(token: String, snippetId: UUID, updatedSnippet: FormatSnippetDTO): FormatSnippetDTO {
-        val url = System.getenv("MANAGER_URI") + "/snippet/" + snippetId.toString()
+        val url = System.getenv("MANAGER_URI") + "/snippet"
         val restTemplate = RestTemplate()
         val headers = HttpHeaders()
         headers.set("Authorization", token)
