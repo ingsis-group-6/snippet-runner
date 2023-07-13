@@ -7,6 +7,7 @@ import common.io.Outputter
 import ingsis.snippetrunner.language.printscript.ListOutputter
 import ingsis.snippetrunner.language.printscript.StringListInputter
 import ingsis.snippetrunner.model.dto.SnippetDTO
+import ingsis.snippetrunner.model.dto.rules.FormatSnippetDTO
 import ingsis.snippetrunner.utils.LinterRulesDecoder
 import linter.`interface`.Linter
 import org.springframework.beans.factory.annotation.Autowired
@@ -47,7 +48,7 @@ class PrintscriptRunnerService(
         val stringAccumulator = StringAccumulator("")
         val concatOutputter: Outputter = StringAccumulatorOutputter(stringAccumulator)
         formatSnippet(snippetManagerResponse, languageVersion, concatOutputter, customRules)
-        this.httpService.updateSnippetCodeInManager(token, snippetId, SnippetDTO(snippetManagerResponse.name, snippetManagerResponse.type, stringAccumulator.stringValue))
+        this.httpService.updateSnippetCodeInManager(token, snippetId, FormatSnippetDTO(snippetManagerResponse.id!!, stringAccumulator.stringValue))
         return stringAccumulator.stringValue
     }
 

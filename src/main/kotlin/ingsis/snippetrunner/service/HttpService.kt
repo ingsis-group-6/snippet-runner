@@ -2,6 +2,7 @@ package ingsis.snippetrunner.service
 
 import ingsis.snippetrunner.model.dto.SnippetDTO
 import ingsis.snippetrunner.model.dto.TestDTO
+import ingsis.snippetrunner.model.dto.rules.FormatSnippetDTO
 import ingsis.snippetrunner.model.dto.rules.FormatterRulesDTO
 import ingsis.snippetrunner.model.dto.rules.LinterRulesDTO
 import org.springframework.http.HttpEntity
@@ -30,14 +31,14 @@ class HttpService {
     }
 
     @Throws(HttpClientErrorException::class)
-    fun updateSnippetCodeInManager(token: String, snippetId: UUID, updatedSnippet: SnippetDTO): SnippetDTO {
+    fun updateSnippetCodeInManager(token: String, snippetId: UUID, updatedSnippet: FormatSnippetDTO): FormatSnippetDTO {
         val url = System.getenv("MANAGER_URI") + "/snippet/" + snippetId.toString()
         val restTemplate = RestTemplate()
         val headers = HttpHeaders()
         headers.set("Authorization", token)
-        val requestEntity = HttpEntity<SnippetDTO>(updatedSnippet, headers)
+        val requestEntity = HttpEntity<FormatSnippetDTO>(updatedSnippet, headers)
 
-        val response: ResponseEntity<SnippetDTO> = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, SnippetDTO::class.java)
+        val response: ResponseEntity<FormatSnippetDTO> = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, FormatSnippetDTO::class.java)
         return response.body!!
 
     }
